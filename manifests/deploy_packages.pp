@@ -78,6 +78,7 @@ define aem_resources::deploy_packages (
                     Aem_package["[${_aem_id}] Deploy package ${package['group']}/${package['name']}-${package['version']"]
                   ]
     }
+  }
 
   $_aem_id_check.each | Integer $index, String $_aem_id | {
     aem_aem { "[${_aem_id}] Wait until login page is ready post Deployment":
