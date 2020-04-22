@@ -46,9 +46,6 @@ define aem_resources::deploy_packages (
       aem_id                     => $_aem_id,
       aem_username               => $aem_username,
       aem_password               => $aem_password,
-      before                     => [
-                                      Aem_package["[${_aem_id}] Deploy package ${package['group']}/${package['name']}-${package['version']"]
-                                    ],
     } -> aem_package { "[${_aem_id}] Deploy package ${package['group']}/${package['name']}-${package['version']}":
       ensure       => $_ensure,
       name         => $package[name],
@@ -61,21 +58,12 @@ define aem_resources::deploy_packages (
       aem_username => $aem_username,
       aem_password => $aem_password,
       aem_id       => $_aem_id,
-      require      => [
-                        Aem_aem["[${_aem_id}]: Wait until CRX Package Manager is ready before deploying package ${package['group']}/${package['name']}-${package['version']}"]
-                      ]
-      before       => [
-                        Exec["[${_aem_id}] Wait post Deploy package ${package['group']}/${package['name']}-${package['version']}"]
-                      ],
     } -> exec { "[${_aem_id}] Wait post Deploy package ${package['group']}/${package['name']}-${package['version']}":
       command => "sleep ${final_sleep_seconds}",
       path    => ['/usr/bin', '/usr/sbin', '/bin'],
       timeout => 0,
       before  => [
                     Aem_aem["[${_aem_id}] Wait until login page is ready post Deployment"]
-                  ],
-      require => [
-                    Aem_package["[${_aem_id}] Deploy package ${package['group']}/${package['name']}-${package['version']"]
                   ]
     }
   }
