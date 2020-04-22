@@ -38,7 +38,7 @@ define aem_resources::deploy_packages (
     validate_bool($activate)
     validate_bool($force)
 
-    aem_aem { "${_aem_id}: Wait until CRX Package Manager is ready before deploying package ${package['group']}/${package['name']}-${package['version']}":
+    aem_aem { "[${_aem_id}]: Wait until CRX Package Manager is ready before deploying package ${package['group']}/${package['name']}-${package['version']}":
       ensure                     => aem_package_manager_is_ready,
       retries_max_tries          => $retries_max_tries,
       retries_base_sleep_seconds => $retries_base_sleep_seconds,
@@ -62,7 +62,7 @@ define aem_resources::deploy_packages (
       aem_password => $aem_password,
       aem_id       => $_aem_id,
       require      => [
-                        Aem_aem["${_aem_id}: Wait until CRX Package Manager is ready before deploying package ${package['group']}/${package['name']}-${package['version']}"]
+                        Aem_aem["[${_aem_id}]: Wait until CRX Package Manager is ready before deploying package ${package['group']}/${package['name']}-${package['version']}"]
                       ]
       before       => [
                         Exec["[${_aem_id}] Wait post Deploy package ${package['group']}/${package['name']}-${package['version']}"]
